@@ -579,8 +579,10 @@ class VagrantClient:
             cachier=self.cachier,
             no_kvm=not os.path.exists("/dev/kvm"),
         )
+        template_no_whitespace_lines = re.sub(r'\n(^\ {2,}$)+', '', template, flags=re.MULTILINE)
+        template_no_double_lines = re.sub(r'\n(^\n$)+', '', template_no_whitespace_lines, flags=re.MULTILINE)
         with open(self._vagrantfile, "w") as f:
-            f.write(template)
+            f.write(template_no_double_lines)
 
     def _write_configs(self):
         self._write_vagrantfile()
